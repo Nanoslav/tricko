@@ -1,6 +1,15 @@
-/* body {
-  text-align: center;
-} */
+body {
+  background-color: #ece5c7;
+}
+
+footer,
+header {
+  background-color: #cdc2ae;
+}
+
+main {
+  background-color: #c2dedc;
+}
 
 #text {
   position: absolute;
@@ -12,7 +21,7 @@
 
 #tshirtImg {
   position: absolute;
-  width: 20px;
+  width: 50%;
 }
 
 #centered-shirt {

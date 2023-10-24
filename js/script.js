@@ -1,13 +1,35 @@
+//===================================================
+//                   VARIABLES
+//===================================================
 const colorpicker = document.getElementById("colorpicker");
 const tshirt = document.getElementById("tshirt");
 const tshirtText = document.getElementById("text");
 const iShirtText = document.getElementById("i_text");
 const iTextColor = document.getElementById("i_textColor");
-const fontSelection = document.getElementById("fontSize");
+const fontSize = document.getElementById("fontSize");
 const fileInput = document.getElementById("formFile");
 const tshirtImage = document.getElementById("tshirtImg");
 const imgSize = document.getElementById("imgSize");
+const fontSelection = document.getElementById("fontSelection");
 
+const fonts = {
+  "Arial": "Arial, Helvetica, sans-serif",
+  "Arial Black": "'Arial Black', Gadget, sans-serif",
+  "Comic Sans MS": "'Comic Sans MS', cursive, sans-serif",
+  "Courier New": "'Courier New', Courier, monospace",
+  "Georgia": "Georgia, serif",
+  "Impact": "Impact, Charcoal, sans-serif",
+  "Lucida Console": "'Lucida Console', Monaco, monospace",
+  "Lucida Sans Unicode": "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
+  "Palatino Linotype": "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
+  "Tahoma": "Tahoma, Geneva, sans-serif",
+  "Times New Roman": "'Times New Roman', Times, serif",
+  "Trebuchet MS": "'Trebuchet MS', Helvetica, sans-serif",
+}
+
+//===================================================
+//                   RECOLOR IMAGE
+//===================================================
 const recolorImage = (image, color) => {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
@@ -30,34 +52,54 @@ function changeColorImage() {
     tshirt.src = newImage.src;
 }
 
-colorpicker.onchange = function() {
+colorpicker.addEventListener("input", function() {
     changeColorImage();
-}
+});
 
+//===================================================
+//                CHANGE SHIRT TEXT
+//===================================================
 iShirtText.onkeyup = function() {
     tshirtText.innerHTML = iShirtText.value;
 }
 
-iTextColor.onchange = function() {
-    tshirtText.style.color = iTextColor.value;
-}
+//===================================================
+//             CHANGE SHIRT TEXT COLOR
+//===================================================
 
+iTextColor.addEventListener("input", function() {
+    tshirtText.style.color = iTextColor.value;
+});
+
+//===================================================
+//                 PREVENT DRAGGING
+//===================================================
 text.addEventListener('mousedown', (event) => {
   event.preventDefault();
 });
 
 document.body.style.userSelect = 'none';
 
-for(let i = 10; i < 41; i++){
+//===================================================
+//                   FONT SIZE
+//===================================================
+for(let i = 10; i < 51; i++){
     let option = document.createElement("option");
     option.value = i+"px";
     option.innerHTML = i+"px";
     if(i == 25){
         option.selected = true;
     }
-    fontSelection.appendChild(option);
+    fontSize.appendChild(option);
 }
 
+fontSize.onchange = function() {
+  tshirtText.style.fontSize = fontSize.value;
+}
+
+//===================================================
+//                   IMAGE SIZE
+//===================================================
 for(let i = 10; i < 101; i++){
     let option = document.createElement("option");
     option.value = i+"%";
@@ -68,13 +110,30 @@ for(let i = 10; i < 101; i++){
     imgSize.appendChild(option);
 }
 
-fontSelection.onchange = function() {
-    tshirtText.style.fontSize = fontSelection.value;
+imgSize.onchange = function() {
+  tshirtImage.style.width = imgSize.value;
 }
 
-imgSize.onchange = function() {
-    tshirtImage.style.width = imgSize.value;
+//===================================================
+//                   FONT SELECTION
+//===================================================
+for(let font in fonts){
+    let option = document.createElement("option");
+    option.value = fonts[font];
+    option.innerHTML = font;
+    if(font == "Arial"){
+        option.selected = true;
+    }
+    fontSelection.appendChild(option);
 }
+
+fontSelection.onchange = function() {
+    tshirtText.style.fontFamily = fontSelection.value;
+}
+
+//===================================================
+//                   DRAG ELEMENT
+//===================================================
 
 dragElement(tshirtImage);
 dragElement(tshirtText);
@@ -120,13 +179,14 @@ function dragElement(elmnt) {
   }
 }
 
+//===================================================
+//                   SHIRT IMAGE
+//===================================================
 fileInput.addEventListener("change", (event) => {
     const file = event.target.files[0];
-    if (file && file.type.match("image.*")) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        tshirtImage.src = reader.result;
-      };
-    }
-})
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      tshirtImage.src = reader.result;
+    };
+});
