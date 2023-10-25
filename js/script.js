@@ -11,22 +11,98 @@ const fileInput = document.getElementById("formFile");
 const tshirtImage = document.getElementById("tshirtImg");
 const imgSize = document.getElementById("imgSize");
 const fontSelection = document.getElementById("fontSelection");
+const savePositions = document.getElementById("savePositions");
 
+const slots = 4;
+
+const fonts = {
+  "Arial": "Arial, Helvetica, sans-serif",
+  "Arial Black": "'Arial Black', Gadget, sans-serif",
+  "Comic Sans MS": "'Comic Sans MS', cursive, sans-serif",
+  "Courier New": "'Courier New', Courier, monospace",
+  "Georgia": "Georgia, serif",
+  "Impact": "Impact, Charcoal, sans-serif",
+  "Lucida Console": "'Lucida Console', Monaco, monospace",
+  "Lucida Sans Unicode": "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
+  "Palatino Linotype": "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
+  "Tahoma": "Tahoma, Geneva, sans-serif",
+  "Times New Roman": "'Times New Roman', Times, serif",
+  "Trebuchet MS": "'Trebuchet MS', Helvetica, sans-serif",
+}
+
+//===================================================
+//              SAVING & LOADING DATA
+//===================================================
 let save = {
-    "tshirtColor": "",
-    "text": "",
-    "textColor": "",
-    "fontSize": "",
-    "image": "",
-    "imageSize": "",
-    "font": "",
-    "top": "",
-    "left": "",
-    "topImg": "",
-    "leftImg": ""
+  "tshirtColor": "",
+  "text": "",
+  "textColor": "",
+  "fontSize": "",
+  "image": "",
+  "imageSize": "",
+  "font": "",
+  "top": "",
+  "left": "",
+  "topImg": "",
+  "leftImg": ""
 };
 
-function saveData() {
+for(let i = 0; i < slots; i++){
+    //Construct row, cols and buttons
+    let row = document.createElement("div");
+    let div = document.createElement("div");
+    let div2 = document.createElement("div");
+    let div3 = document.createElement("div");
+    row.classList.add("row", "mb-3");
+    div.classList.add("col-6");
+    div2.classList.add("col-5");
+    div3.classList.add("col-1");
+
+    //Save button
+    let button = document.createElement("button");
+    button.classList.add("btn", "btn-primary", "w-100");
+    button.type = "button";
+    button.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> Uložit ' + (i+1);
+
+    //Load button
+    let button2 = document.createElement("button");
+    button2.classList.add("btn", "btn-secondary", "w-100");
+    button2.type = "button";
+    button2.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Načíst ' + (i+1);
+
+    //Delete button
+    let button3 = document.createElement("button");
+    button3.classList.add("btn", "btn-danger");
+    button3.type = "button";
+    button3.innerHTML = '<i class="fa-solid fa-trash"></i> ';
+
+    //Save data listener
+    button.addEventListener("click", function() {
+        saveData(i);
+    });
+
+    //Load data listener
+    button2.addEventListener("click", function() {
+        loadData(i);
+    });
+
+    //Delete data listener
+    button3.addEventListener("click", function() {
+        localStorage.removeItem(i);
+        alert("Data " + (i+1) + " byla smazána");
+    });
+
+    //Append elements
+    div.appendChild(button);
+    div2.appendChild(button2);
+    div3.appendChild(button3);
+    row.appendChild(div);
+    row.appendChild(div2);
+    row.appendChild(div3);
+    savePositions.appendChild(row);
+}
+
+function saveData(slot) {
     save.tshirtColor = colorpicker.value;
     save.text = iShirtText.value;
     save.textColor = iTextColor.value;
@@ -38,13 +114,13 @@ function saveData() {
     save.left = tshirtText.style.left;
     save.topImg = tshirtImage.style.top;
     save.leftImg = tshirtImage.style.left;
-    localStorage.setItem("save", JSON.stringify(save));
-    console.log("Data saved");
+    localStorage.setItem(slot, JSON.stringify(save));
+    console.log("Data " + slot + " saved");
 }
 
-function loadData() {
-    if(localStorage.getItem("save") != null){
-        save = JSON.parse(localStorage.getItem("save"));
+function loadData(slot) {
+    if(localStorage.getItem(slot) != null){
+        save = JSON.parse(localStorage.getItem(slot));
         iShirtText.value = save.text;
         iTextColor.value = save.textColor;
         fontSize.value = save.fontSize;
@@ -64,22 +140,10 @@ function loadData() {
         tshirtText.style.left = save.left;
         tshirtImage.style.top = save.topImg;
         tshirtImage.style.left = save.leftImg;
+        console.log("Data " + slot + " loaded");
+    }else{
+        alert("Na slotu " + (slot+1) + " nejsou uložena žádná data");
     }
-}
-
-const fonts = {
-  "Arial": "Arial, Helvetica, sans-serif",
-  "Arial Black": "'Arial Black', Gadget, sans-serif",
-  "Comic Sans MS": "'Comic Sans MS', cursive, sans-serif",
-  "Courier New": "'Courier New', Courier, monospace",
-  "Georgia": "Georgia, serif",
-  "Impact": "Impact, Charcoal, sans-serif",
-  "Lucida Console": "'Lucida Console', Monaco, monospace",
-  "Lucida Sans Unicode": "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
-  "Palatino Linotype": "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
-  "Tahoma": "Tahoma, Geneva, sans-serif",
-  "Times New Roman": "'Times New Roman', Times, serif",
-  "Trebuchet MS": "'Trebuchet MS', Helvetica, sans-serif",
 }
 
 //===================================================
