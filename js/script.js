@@ -12,6 +12,61 @@ const tshirtImage = document.getElementById("tshirtImg");
 const imgSize = document.getElementById("imgSize");
 const fontSelection = document.getElementById("fontSelection");
 
+let save = {
+    "tshirtColor": "",
+    "text": "",
+    "textColor": "",
+    "fontSize": "",
+    "image": "",
+    "imageSize": "",
+    "font": "",
+    "top": "",
+    "left": "",
+    "topImg": "",
+    "leftImg": ""
+};
+
+function saveData() {
+    save.tshirtColor = colorpicker.value;
+    save.text = iShirtText.value;
+    save.textColor = iTextColor.value;
+    save.fontSize = fontSize.value;
+    save.image = tshirtImage.src;
+    save.imageSize = imgSize.value;
+    save.font = fontSelection.value;
+    save.top = tshirtText.style.top;
+    save.left = tshirtText.style.left;
+    save.topImg = tshirtImage.style.top;
+    save.leftImg = tshirtImage.style.left;
+    localStorage.setItem("save", JSON.stringify(save));
+    console.log("Data saved");
+}
+
+function loadData() {
+    if(localStorage.getItem("save") != null){
+        save = JSON.parse(localStorage.getItem("save"));
+        iShirtText.value = save.text;
+        iTextColor.value = save.textColor;
+        fontSize.value = save.fontSize;
+        if(save.image != ""){
+            tshirtImage.src = save.image;
+        }
+        imgSize.value = save.imageSize;
+        fontSelection.value = save.font;
+        colorpicker.value = save.tshirtColor;
+        changeColorImage();
+        tshirtText.innerHTML = save.text;
+        tshirtText.style.color = save.textColor;
+        tshirtText.style.fontSize = save.fontSize;
+        tshirtText.style.fontFamily = save.font;
+        tshirtImage.style.width = save.imageSize;
+        tshirtText.style.top = save.top;
+        tshirtText.style.left = save.left;
+        tshirtImage.style.top = save.topImg;
+        tshirtImage.style.left = save.leftImg;
+    }
+}
+
 const fonts = {
   "Arial": "Arial, Helvetica, sans-serif",
   "Arial Black": "'Arial Black', Gadget, sans-serif",
