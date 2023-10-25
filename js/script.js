@@ -56,6 +56,8 @@ colorpicker.addEventListener("input", function() {
     changeColorImage();
 });
 
+changeColorImage();
+
 //===================================================
 //                CHANGE SHIRT TEXT
 //===================================================
